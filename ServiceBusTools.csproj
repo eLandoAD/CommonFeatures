@@ -1,14 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0; net7.0; net8.0</TargetFramework>
+		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Title>elando.Common.Feature</Title>
 		<Description>Common Features for microservices</Description>
 		<Copyright>own license</Copyright>
 		<PackageTags>Common Feature, Service, Bus, ServiceBus, .NET </PackageTags>
-		<Version>1.0.2</Version>
+		<Version>1.0.3</Version>
 		<PackageLicenseFile>License.md</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>

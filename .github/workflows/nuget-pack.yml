@@ -1,0 +1,27 @@
+name: Publish NuGet Package
+
+on:
+  pull_request:
+    types: [closed]
+    branches: ["main"]
+    
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 7.x
+
+    - name: Build and publish NuGet package
+      run: |
+        dotnet build ServiceBusTools.csproj -c Release
+        dotnet pack ServiceBusTools.csproj -c Release --no-build --output ./nupkg
+
+    - name: Publish to NuGet.org
+      run: dotnet nuget push ./nupkg/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGETAPIKEYCOMMONFEATURESKNEV }}

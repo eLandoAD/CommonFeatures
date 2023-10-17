@@ -28,7 +28,7 @@ builder.Services.AddAzureClients(opt =>
     opt.AddServiceBusClient(builder.Configuration.GetConnectionString("ServiceBusConnection"));
 });
 ...
-builder.services.AddSingleton<ServiceBusPublisher>();
+builder.Services.AddSingleton<ServiceBusPublisher>();
 ...
 ````
 

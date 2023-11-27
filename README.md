@@ -27,9 +27,20 @@ builder.Services.AddAzureClients(opt =>
 {
     opt.AddServiceBusClient(builder.Configuration.GetConnectionString("ServiceBusConnection"));
 });
+...
+builder.Services.AddSingleton<ServiceBusPublisher>();
+...
 ````
 
-#### Example:
+#### 3. Add into code
+````csharp
+// add as field
+private readonly ServiceBusPublisher _publisher;
+
+//inject into ctor
+ ...
+````
+#### Use it:
 
 ````csharp
 ... YourMethod(){

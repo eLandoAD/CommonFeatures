@@ -27,7 +27,7 @@
         public async Task Publish<T>(T model, string topicName, string traceId) where T : class, new()
         {
             var publisher = serviceBusClient.CreateSender(topicName);
-            var body = JsonSerializer.Serialize(new MessageWithTraceId<T>() { Model = model, TraceId = traceId });
+            var body = JsonSerializer.Serialize(new MessageWithTraceId<T>() { Model = model, RequestId = traceId });
             var message = new ServiceBusMessage(body);
             await publisher.SendMessageAsync(message);
         }

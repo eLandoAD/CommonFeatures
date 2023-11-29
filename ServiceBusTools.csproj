@@ -8,7 +8,7 @@
 		<Description>Common Features for microservices</Description>
 		<Copyright>own license</Copyright>
 		<PackageTags>Common Feature, Service, Bus, ServiceBus, .NET </PackageTags>
-		<Version>1.0.4</Version>
+		<Version>1.0.5</Version>
 		<PackageLicenseFile>License.md</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>

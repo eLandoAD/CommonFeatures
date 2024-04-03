@@ -32,6 +32,16 @@
             await publisher.SendMessageAsync(message);
         }
 
+        public async Task Publish<T>(T model, string topicName, string traceId, string prefix) where T : class, new()
+        {
+            var publisher = serviceBusClient.CreateSender(topicName);
+            var body = JsonSerializer.Serialize(new MessageWithTraceId<T>() { Model = model, RequestId = traceId });
+            var message = new ServiceBusMessage(body);
+            message.ApplicationProperties.Add(nameof(prefix), prefix);
+
+            await publisher.SendMessageAsync(message);
+        }
+
         public async Task PublishNotification<T>(T model) where T : class
         {
             await this.Publish(model, NOTIFICATION_TOPIC_NAME);

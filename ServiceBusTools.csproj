@@ -1,31 +1,53 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<!--
+			net6.0 dropped (end of support Nov 2024) and net8.0 added alongside net10.0. Every
+			consuming repo targets net10.0 today and was therefore running a net6.0 assembly by
+			forward compatibility. net8.0 is kept because it is LTS until Nov 2026 and because
+			Euroins.Contracts multi-targets net8.0/net9.0/net10.0.
+
+			Note: Euroins.Contracts ALSO targets net7.0. It currently pins ServiceBusTools 1.0.5 so
+			nothing breaks today, but its net7.0 target cannot consume 2.x - drop net7.0 there before
+			bumping it, or that build will fail to restore.
+		-->
+		<TargetFrameworks>net8.0;net10.0</TargetFrameworks>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Title>elando.Common.Feature</Title>
 		<Description>Common Features for microservices</Description>
 		<Copyright>own license</Copyright>
 		<PackageTags>Common Feature, Service, Bus, ServiceBus, .NET </PackageTags>
-		<Version>1.0.9</Version>
+		<!--
+			2.0.0, not 1.1.0: dropping a target framework is a breaking change, and the highest
+			version published anywhere today is 1.0.9 (nuget.org) - nothing exists on the GitHub
+			feed yet, so 2.0.0 is unambiguously newest.
+		-->
+		<Version>2.0.0</Version>
+		<!-- GitHub Packages uses this to link the published package to its repository. -->
+		<RepositoryUrl>https://github.com/eLandoAD/CommonFeatures</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 		<PackageLicenseFile>License.md</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
+	<!-- Both MIT, and both already ship net8.0/net10.0 assets. No commercial tier at any version. -->
 	<ItemGroup>
-		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.16.2" />
-		<PackageReference Include="Microsoft.Extensions.Azure" Version="1.7.0" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.20.2" />
+		<PackageReference Include="Microsoft.Extensions.Azure" Version="1.14.0" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="License.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Update="README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+	<!--
+		Include, not Update - and only in the outer build. Converting this project from a single
+		TargetFramework to TargetFrameworks broke packing with NU5030 ("the license file does not
+		exist in the package"): `<None Update="License.md">` only modifies an item that ALREADY
+		exists, and the default item globs are not evaluated in the outer build where `pack` runs,
+		so it updated nothing and the licence never reached the package. Conditioning on an empty
+		TargetFramework applies these to the outer build only, which avoids duplicate None items in
+		the per-framework inner builds.
+	-->
+	<ItemGroup Condition="'$(TargetFramework)' == ''">
+		<None Include="License.md" Pack="true" PackagePath="" />
+		<None Include="README.md" Pack="true" PackagePath="" />
 	</ItemGroup>
 </Project>
